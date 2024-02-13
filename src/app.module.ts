@@ -15,19 +15,36 @@ import { ZooShift } from './shift/shift.entity';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'mssql',
-        host: configService.get<string>('DATABASE_HOST'),
-        port: Number(configService.get<number>('DATABASE_PORT')),
-        username: configService.get<string>('DATABASE_USERNAME'),
-        password: configService.get<string>('DATABASE_PASSWORD'),
-        database: configService.get<string>('DATABASE_NAME'),
-        entities: [ZooKeeper, ZooAnimal, ZooShift],
-        synchronize: true,
-        options: {
-          encrypt: false,
-        },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        console.log({
+          type: 'mssql',
+          host: configService.get<string>('DATABASE_HOST'),
+          port: Number(configService.get<number>('DATABASE_PORT')),
+          username: configService.get<string>('DATABASE_USERNAME'),
+          password: configService.get<string>('DATABASE_PASSWORD'),
+          database: configService.get<string>('DATABASE_NAME'),
+          entities: [ZooKeeper, ZooAnimal, ZooShift],
+          synchronize: false,
+          logging: true,
+          options: {
+            encrypt: false,
+          },
+        });
+        return {
+          type: 'mssql',
+          host: configService.get<string>('DATABASE_HOST'),
+          port: Number(configService.get<number>('DATABASE_PORT')),
+          username: configService.get<string>('DATABASE_USERNAME'),
+          password: configService.get<string>('DATABASE_PASSWORD'),
+          database: configService.get<string>('DATABASE_NAME'),
+          entities: [ZooKeeper, ZooAnimal, ZooShift],
+          synchronize: false,
+          autoLoadEntities: true,
+          options: {
+            encrypt: false,
+          },
+        };
+      },
       inject: [ConfigService],
     }),
     KeeperModule,

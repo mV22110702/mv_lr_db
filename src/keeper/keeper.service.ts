@@ -13,23 +13,52 @@ export class KeeperService {
   ) {}
 
   public async findAll(): Promise<ZooKeeper[]> {
-    return this.keeperRepository.find();
+    return this.keeperRepository
+      .createQueryBuilder('keeper')
+      .select()
+      .getMany();
   }
 
   public async findOne(id: number): Promise<ZooKeeper> {
-    return this.keeperRepository.findOne({ where: { id } });
+    return this.keeperRepository
+      .createQueryBuilder()
+      .select()
+      .where('id = :id', { id })
+      .getOne();
   }
 
-  public async create(keeper: CreateKeeperDto): Promise<ZooKeeper> {
-    return this.keeperRepository.save(keeper);
+  public async create(keeperDto: CreateKeeperDto): Promise<ZooKeeper> {
+    const res = await this.keeperRepository
+      .createQueryBuilder()
+      .insert()
+      .values(keeperDto)
+      .execute();
+    console.log('SDF');
+    console.log(res);
+    return this.findOne(res.identifiers[0].id);
   }
 
-  public async update(id: number, keeper: UpdateKeeperDto): Promise<ZooKeeper> {
-    await this.keeperRepository.update(id, keeper);
-    return this.keeperRepository.findOne({ where: { id } });
+  public async update(
+    id: number,
+    updateKeeperDto: UpdateKeeperDto,
+  ): Promise<ZooKeeper> {
+    await this.keeperRepository
+      .createQueryBuilder()
+      .update()
+      .set(updateKeeperDto)
+      .where('id = :id', { id })
+      .execute();
+    return this.findOne(id);
   }
 
-  public async remove(id: number): Promise<void> {
-    await this.keeperRepository.delete(id);
+  public async remove(id: number): Promise<ZooKeeper> {
+    const candidate = await this.findOne(id);
+    await this.keeperRepository
+      .createQueryBuilder()
+      .delete()
+      .from(ZooKeeper)
+      .where('id = :id', { id })
+      .execute();
+    return candidate;
   }
 }

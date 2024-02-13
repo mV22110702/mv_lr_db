@@ -5,9 +5,9 @@ import {
   ManyToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
+  JoinColumn,
 } from 'typeorm';
 import { ZooAnimal } from '../animal/animal.entity';
-import { JoinColumn } from 'typeorm/browser';
 import { ZooKeeper } from '../keeper/keeper.entity';
 @Entity({ name: 'zoo_shifts' })
 @Check('start_end_shift_time_check', `"starts_at" < "ends_at"`)
