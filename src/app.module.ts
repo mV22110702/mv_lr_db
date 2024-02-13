@@ -9,6 +9,7 @@ import { AnimalModule } from './animal/animal.module';
 import { ShiftModule } from './shift/shift.module';
 import { ZooAnimal } from './animal/animal.entity';
 import { ZooShift } from './shift/shift.entity';
+import { FoodModule } from './food/food.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ZooShift } from './shift/shift.entity';
     KeeperModule,
     AnimalModule,
     ShiftModule,
+    FoodModule,
   ],
   controllers: [AppController],
   providers: [AppService],
