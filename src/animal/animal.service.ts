@@ -20,7 +20,6 @@ export class AnimalService {
       .select()
       .getMany();
   }
-
   public async findOne(id: number): Promise<ZooAnimal> {
     return this.animalRepository
       .createQueryBuilder()
@@ -28,7 +27,6 @@ export class AnimalService {
       .where('id = :id', { id })
       .getOne();
   }
-
   public async create(animalDto: CreateAnimalDto): Promise<ZooAnimal> {
     const res = await this.animalRepository
       .createQueryBuilder()
@@ -37,7 +35,6 @@ export class AnimalService {
       .execute();
     return this.findOne(res.identifiers[0].id);
   }
-
   public async update(
     id: number,
     updateAnimalDto: UpdateAnimalDto,
@@ -54,7 +51,6 @@ export class AnimalService {
       .execute();
     return this.findOne(id);
   }
-
   public async remove(id: number): Promise<ZooAnimal> {
     const candidate = await this.findOne(id);
     if (!candidate) {

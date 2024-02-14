@@ -17,22 +17,18 @@ import { FindFeedHistoryDto } from './dto/find-feed-history.dto';
 @Controller('feed-history')
 export class FeedHistoryController {
   public constructor(private readonly feedHistoryService: FeedHistoryService) {}
-
   @Post('/one')
   create(@Body() createFeedHistoryDto: CreateFeedHistoryDto) {
     return this.feedHistoryService.create(createFeedHistoryDto);
   }
-
   @Get('/all')
   findAll() {
     return this.feedHistoryService.findAll();
   }
-
   @Get('/one')
   findOne(@Body() findFeedHistoryDto: FindFeedHistoryDto) {
     return this.feedHistoryService.findOne(findFeedHistoryDto);
   }
-
   @Patch('/one')
   update(
     @Body()
@@ -48,7 +44,6 @@ export class FeedHistoryController {
       updateFeedHistoryDto,
     );
   }
-
   @Delete('/one')
   remove(@Body() findFeedHistoryDto: FindFeedHistoryDto) {
     return this.feedHistoryService.remove(findFeedHistoryDto);

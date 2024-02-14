@@ -39,7 +39,7 @@ export class FeedHistory {
   @JoinColumn({ name: 'food_id' })
   food: Food;
 
-  @PrimaryColumn({ type: 'datetime', name: 'created_at', insert:true })
+  @PrimaryColumn({ type: 'datetime', name: 'created_at', insert: true })
   createdAt: Date;
 
   @Column()
