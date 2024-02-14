@@ -73,9 +73,9 @@ export class ShiftService {
   }
 
   public async remove({ animalId, keeperId }: FindShiftDto): Promise<ZooShift> {
-    const shiftToUpdate = await this.findOne({ animalId, keeperId });
-    const copy = { ...shiftToUpdate };
-    await this.shiftRepository.remove(shiftToUpdate);
+    const shiftToDelete = await this.findOne({ animalId, keeperId });
+    const copy = { ...shiftToDelete };
+    await this.shiftRepository.remove(shiftToDelete);
     return copy;
   }
 }

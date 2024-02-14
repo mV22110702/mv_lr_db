@@ -10,6 +10,7 @@ import { ShiftModule } from './shift/shift.module';
 import { ZooAnimal } from './animal/animal.entity';
 import { ZooShift } from './shift/shift.entity';
 import { FoodModule } from './food/food.module';
+import { FeedHistoryModule } from './feed-history/feed-history.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { FoodModule } from './food/food.module';
     AnimalModule,
     ShiftModule,
     FoodModule,
+    FeedHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { FeedHistory } from "../feed-history/feed-history.entity";
 
 @Entity({ name: 'food' })
 export class Food {
@@ -16,4 +17,7 @@ export class Food {
 
   @Column({ name: 'used_at', type: 'datetime', nullable: true })
   usedAt: Date;
+
+  @OneToMany((type) => FeedHistory, (history) => history.food)
+  feedHistories: FeedHistory[];
 }
