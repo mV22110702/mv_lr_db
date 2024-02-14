@@ -1,5 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { FeedHistory } from "../feed-history/feed-history.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { FeedHistory } from '../feed-history/feed-history.entity';
 
 @Entity({ name: 'food' })
 export class Food {

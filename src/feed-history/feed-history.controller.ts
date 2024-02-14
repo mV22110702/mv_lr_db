@@ -12,36 +12,36 @@ import { UpdateShiftDto } from '../shift/dto/update-shift.dto';
 import { FeedHistoryService } from './feed-history.service';
 import { CreateFeedHistoryDto } from './dto/create-feed-history.dto';
 import { UpdateFeedHistoryDto } from './dto/update-feed-history.dto';
+import { FindFeedHistoryDto } from './dto/find-feed-history.dto';
 
 @Controller('feed-history')
 export class FeedHistoryController {
   public constructor(private readonly feedHistoryService: FeedHistoryService) {}
 
-  @Post()
+  @Post('/one')
   create(@Body() createFeedHistoryDto: CreateFeedHistoryDto) {
     return this.feedHistoryService.create(createFeedHistoryDto);
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.feedHistoryService.findAll();
   }
 
-  @Get(':animalId/:keeperId/:createdAt')
-  findOne(
-    @Param('animalId') animalId: number,
-    @Param('keeperId') keeperId: number,
-    @Param('createdAt') createdAt: Date,
-  ) {
-    return this.feedHistoryService.findOne({ animalId, keeperId, createdAt });
+  @Get('/one')
+  findOne(@Body() findFeedHistoryDto: FindFeedHistoryDto) {
+    return this.feedHistoryService.findOne(findFeedHistoryDto);
   }
 
-  @Patch(':animalId/:keeperId/:createdAt')
+  @Patch('/one')
   update(
-    @Param('animalId') animalId: number,
-    @Param('keeperId') keeperId: number,
-    @Param('createdAt') createdAt: Date,
-    @Body() updateFeedHistoryDto: UpdateFeedHistoryDto,
+    @Body()
+    {
+      animalId,
+      keeperId,
+      createdAt,
+      ...updateFeedHistoryDto
+    }: UpdateFeedHistoryDto,
   ) {
     return this.feedHistoryService.update(
       { animalId, keeperId, createdAt },
@@ -49,12 +49,8 @@ export class FeedHistoryController {
     );
   }
 
-  @Delete(':animalId/:keeperId/:createdAt')
-  remove(
-    @Param('animalId') animalId: number,
-    @Param('keeperId') keeperId: number,
-    @Param('createdAt') createdAt: Date,
-  ) {
-    return this.feedHistoryService.remove({ animalId, keeperId, createdAt });
+  @Delete('/one')
+  remove(@Body() findFeedHistoryDto: FindFeedHistoryDto) {
+    return this.feedHistoryService.remove(findFeedHistoryDto);
   }
 }

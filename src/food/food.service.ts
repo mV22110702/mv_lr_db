@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Food } from './food.entity';
@@ -32,12 +32,14 @@ export class FoodService {
       .insert()
       .values(foodDto)
       .execute();
-    console.log('SDF');
-    console.log(res);
     return this.findOne(res.identifiers[0].id);
   }
 
   public async update(id: number, updateFoodDto: UpdateFoodDto): Promise<Food> {
+    const candidate = await this.findOne(id);
+    if (!candidate) {
+      throw new HttpException('Food not found', HttpStatus.BAD_REQUEST);
+    }
     await this.foodRepository
       .createQueryBuilder()
       .update()
@@ -49,6 +51,9 @@ export class FoodService {
 
   public async remove(id: number): Promise<Food> {
     const candidate = await this.findOne(id);
+    if (!candidate) {
+      return null;
+    }
     await this.foodRepository
       .createQueryBuilder()
       .delete()

@@ -21,7 +21,7 @@ export class CreateFeedHistoryDto {
   readonly foodId: number;
 
   @IsNumber({}, { message: 'Amount must be a number' })
-  @Min(1, { message: 'Amount must be greater than 0' })
+  @Min(0, { message: 'Amount must be greater than 0' })
   @IsNotEmpty({ message: 'Amount is required' })
   readonly amount: number;
 }

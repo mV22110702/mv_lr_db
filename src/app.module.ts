@@ -18,20 +18,6 @@ import { FeedHistoryModule } from './feed-history/feed-history.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        console.log({
-          type: 'mssql',
-          host: configService.get<string>('DATABASE_HOST'),
-          port: Number(configService.get<number>('DATABASE_PORT')),
-          username: configService.get<string>('DATABASE_USERNAME'),
-          password: configService.get<string>('DATABASE_PASSWORD'),
-          database: configService.get<string>('DATABASE_NAME'),
-          entities: [ZooKeeper, ZooAnimal, ZooShift],
-          synchronize: false,
-          logging: true,
-          options: {
-            encrypt: false,
-          },
-        });
         return {
           type: 'mssql',
           host: configService.get<string>('DATABASE_HOST'),
@@ -41,6 +27,8 @@ import { FeedHistoryModule } from './feed-history/feed-history.module';
           database: configService.get<string>('DATABASE_NAME'),
           entities: [ZooKeeper, ZooAnimal, ZooShift],
           synchronize: false,
+          logger: 'advanced-console',
+          logging: true,
           autoLoadEntities: true,
           options: {
             encrypt: false,

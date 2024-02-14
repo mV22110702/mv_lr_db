@@ -30,7 +30,7 @@ export class FeedHistory {
   @JoinColumn({ name: 'keeper_id' })
   keeper: ZooKeeper;
 
-  @PrimaryColumn({ type: 'int', name: 'food_id' })
+  @Column({ type: 'int', name: 'food_id' })
   @ManyToOne(() => Food, (food) => food.feedHistories, {
     nullable: false,
     onUpdate: 'CASCADE',
@@ -39,7 +39,7 @@ export class FeedHistory {
   @JoinColumn({ name: 'food_id' })
   food: Food;
 
-  @PrimaryColumn({ type: 'datetime', name: 'created_at' })
+  @PrimaryColumn({ type: 'datetime', name: 'created_at', insert:true })
   createdAt: Date;
 
   @Column()

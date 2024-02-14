@@ -39,6 +39,7 @@ export class FeedHistoryService {
       .select()
       .leftJoinAndSelect('history.animal', 'animal')
       .leftJoinAndSelect('history.keeper', 'keeper')
+      .leftJoinAndSelect('history.food', 'food')
       .where('history.animal.id = :animalId', { animalId })
       .andWhere('history.keeper.id = :keeperId', { keeperId })
       .andWhere('history.createdAt = :createdAt', { createdAt })
@@ -57,18 +58,40 @@ export class FeedHistoryService {
     const food = await this.foodService.findOne(feedHistoryDto.foodId);
     if (!food)
       throw new HttpException('Food not found', HttpStatus.BAD_REQUEST);
+    const candidate = await this.findOne({
+      animalId: feedHistoryDto.animalId,
+      createdAt: feedHistoryDto.createdAt,
+      keeperId: feedHistoryDto.keeperId,
+    });
 
-    const res = await this.feedHistoryRepository
-      .createQueryBuilder()
-      .insert()
-      .values({
-        animal,
-        keeper,
-        food,
-        createdAt: feedHistoryDto.createdAt,
-        amount: feedHistoryDto.amount,
-      })
-      .execute();
+    if (candidate) {
+      throw new HttpException(
+        'Feed history already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    await this.feedHistoryRepository.manager.transaction(async (manager) => {
+      console.log([
+        feedHistoryDto.animalId,
+        feedHistoryDto.keeperId,
+        feedHistoryDto.foodId,
+        feedHistoryDto.createdAt,
+        feedHistoryDto.amount,
+      ]);
+      await manager.query(
+        'SET IDENTITY_INSERT feed_history ON;' +
+          'INSERT INTO feed_history (animal_id, keeper_id, food_id, created_at, amount) ' +
+          `VALUES (@0, @1, @2, @3, @4);` +
+          'SET IDENTITY_INSERT feed_history OFF;',
+        [
+          feedHistoryDto.animalId,
+          feedHistoryDto.keeperId,
+          feedHistoryDto.foodId,
+          feedHistoryDto.createdAt,
+          feedHistoryDto.amount,
+        ],
+      );
+    });
     return this.findOne({
       keeperId: feedHistoryDto.keeperId,
       animalId: feedHistoryDto.animalId,
@@ -78,7 +101,7 @@ export class FeedHistoryService {
 
   public async update(
     { animalId, keeperId, createdAt }: FindFeedHistoryDto,
-    feedHistoryDto: UpdateFeedHistoryDto,
+    feedHistoryDto: Pick<UpdateFeedHistoryDto, 'amount' | 'foodId'>,
   ): Promise<FeedHistory> {
     const feedHistoryToUpdate = await this.findOne({
       animalId,
@@ -87,6 +110,10 @@ export class FeedHistoryService {
     });
     if (!feedHistoryToUpdate)
       throw new HttpException('Feed history not found', HttpStatus.BAD_REQUEST);
+    const food = await this.foodService.findOne(feedHistoryDto.foodId);
+    if (!food)
+      throw new HttpException('Food not found', HttpStatus.BAD_REQUEST);
+    if (feedHistoryDto.foodId) feedHistoryToUpdate.food = food;
     Object.keys(feedHistoryToUpdate).forEach(
       (k) =>
         (feedHistoryToUpdate[k] = feedHistoryDto[k] || feedHistoryToUpdate[k]),
@@ -105,6 +132,9 @@ export class FeedHistoryService {
       keeperId,
       createdAt,
     });
+    if (!feedHistoryToDelete) {
+      return null;
+    }
     const copy = { ...feedHistoryToDelete };
     await this.feedHistoryRepository.remove(feedHistoryToDelete);
     return copy;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAnimalDto } from './dto/create-animal.dto';
 import { UpdateAnimalDto } from './dto/update-animal.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -35,8 +35,6 @@ export class AnimalService {
       .insert()
       .values(animalDto)
       .execute();
-    console.log('SDF');
-    console.log(res);
     return this.findOne(res.identifiers[0].id);
   }
 
@@ -44,6 +42,10 @@ export class AnimalService {
     id: number,
     updateAnimalDto: UpdateAnimalDto,
   ): Promise<ZooAnimal> {
+    const candidate = await this.findOne(id);
+    if (!candidate) {
+      throw new HttpException('Animal not found', HttpStatus.BAD_REQUEST);
+    }
     await this.animalRepository
       .createQueryBuilder()
       .update()
@@ -55,6 +57,9 @@ export class AnimalService {
 
   public async remove(id: number): Promise<ZooAnimal> {
     const candidate = await this.findOne(id);
+    if (!candidate) {
+      return null;
+    }
     await this.animalRepository
       .createQueryBuilder()
       .delete()

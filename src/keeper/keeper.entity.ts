@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ZooShift } from '../shift/shift.entity';
-import { FeedHistory } from "../feed-history/feed-history.entity";
+import { FeedHistory } from '../feed-history/feed-history.entity';
 @Entity({ name: 'zoo_keepers' })
 export class ZooKeeper {
   @PrimaryGeneratedColumn()

@@ -44,6 +44,13 @@ export class ShiftService {
     const keeper = await this.keeperService.findOne(shift.keeperId);
     if (!keeper)
       throw new HttpException('Keeper not found', HttpStatus.BAD_REQUEST);
+    const candidate = await this.findOne({
+      animalId: shift.animalId,
+      keeperId: shift.keeperId,
+    });
+    if (candidate) {
+      throw new HttpException('Shift already exists', HttpStatus.BAD_REQUEST);
+    }
     const res = await this.shiftRepository
       .createQueryBuilder()
       .insert()
@@ -74,6 +81,9 @@ export class ShiftService {
 
   public async remove({ animalId, keeperId }: FindShiftDto): Promise<ZooShift> {
     const shiftToDelete = await this.findOne({ animalId, keeperId });
+    if (!shiftToDelete) {
+      return null;
+    }
     const copy = { ...shiftToDelete };
     await this.shiftRepository.remove(shiftToDelete);
     return copy;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ZooKeeper } from './keeper.entity';
 import { Repository } from 'typeorm';
@@ -33,8 +33,6 @@ export class KeeperService {
       .insert()
       .values(keeperDto)
       .execute();
-    console.log('SDF');
-    console.log(res);
     return this.findOne(res.identifiers[0].id);
   }
 
@@ -42,6 +40,10 @@ export class KeeperService {
     id: number,
     updateKeeperDto: UpdateKeeperDto,
   ): Promise<ZooKeeper> {
+    const candidate = await this.findOne(id);
+    if (!candidate) {
+      throw new HttpException('Keeper not found', HttpStatus.BAD_REQUEST);
+    }
     await this.keeperRepository
       .createQueryBuilder()
       .update()
@@ -53,6 +55,9 @@ export class KeeperService {
 
   public async remove(id: number): Promise<ZooKeeper> {
     const candidate = await this.findOne(id);
+    if (!candidate) {
+      return null;
+    }
     await this.keeperRepository
       .createQueryBuilder()
       .delete()
