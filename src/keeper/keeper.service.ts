@@ -12,6 +12,25 @@ export class KeeperService {
     private readonly keeperRepository: Repository<ZooKeeper>,
   ) {}
 
+  public async getShiftsCountByKeeperId(id: number): Promise<any> {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const sql = require('mssql');
+    await sql.connect({
+      password: '12345678',
+      user: 'sa',
+      server: 'localhost',
+      database: 'LR1_MV22110702',
+      options: { encrypt: false },
+      port: 49623,
+    });
+
+    const request = new sql.Request();
+    request.input('keeperId', sql.Int, id);
+    request.output('shiftCount', sql.Int, 0);
+    const res = await request.execute('countShiftsByKeeper');
+    return res.output;
+  }
+
   public async findAll(): Promise<ZooKeeper[]> {
     return this.keeperRepository
       .createQueryBuilder('keeper')

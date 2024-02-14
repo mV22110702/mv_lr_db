@@ -17,18 +17,15 @@ export class CreateShiftDto {
   @Min(1, { message: 'Animal ID must be greater than 0' })
   @IsNotEmpty({ message: 'Animal ID is required' })
   readonly animalId: number;
-
   @Validate(IsStartBeforeEnd, ['endsAt'], {
     message: 'Start date must be before end date',
   })
   @IsDateString({}, { message: 'Start date must be a valid date' })
   @IsNotEmpty({ message: 'Start date is required' })
   readonly startsAt: Date;
-
   @IsDateString({}, { message: 'End date must be a valid date' })
   @IsNotEmpty({ message: 'End date is required' })
   readonly endsAt: Date;
-
   @IsNumber({}, { message: 'Salary must be a number' })
   @Min(0, { message: 'Salary must be greater than 0' })
   @IsNotEmpty({ message: 'Salary is required' })

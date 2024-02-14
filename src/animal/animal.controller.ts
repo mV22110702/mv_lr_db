@@ -17,6 +17,10 @@ export class AnimalController {
   create(@Body() createAnimalDto: CreateAnimalDto) {
     return this.animalService.create(createAnimalDto);
   }
+  @Get('/details/:id')
+  getAnimalDetails(@Param('id') id: number) {
+    return this.animalService.getAnimalDetails(id);
+  }
   @Get()
   findAll() {
     return this.animalService.findAll();

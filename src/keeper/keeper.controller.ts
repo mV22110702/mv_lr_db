@@ -19,6 +19,11 @@ export class KeeperController {
     return this.keeperService.create(createKeeperDto);
   }
 
+  @Get('shifts-count/:id')
+  async getShiftsCountByKeeperId(@Param('id') id: number) {
+    return await this.keeperService.getShiftsCountByKeeperId(id);
+  }
+
   @Get()
   findAll() {
     return this.keeperService.findAll();

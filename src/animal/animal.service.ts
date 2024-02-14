@@ -14,6 +14,26 @@ export class AnimalService {
     @InjectRepository(ZooAnimal)
     private readonly animalRepository: Repository<ZooAnimal>,
   ) {}
+
+  public async getAnimalDetails(id: number): Promise<any> {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const sql = require('mssql');
+    await sql.connect({
+      password: '12345678',
+      user: 'sa',
+      server: 'localhost',
+      database: 'LR1_MV22110702',
+      options: { encrypt: false },
+      port: 49623,
+    });
+
+    const request = new sql.Request();
+    request.input('animalId', sql.Int, id);
+    const res = (await request.execute('getAnimalScientificNameWithShifts'))
+      .recordsets;
+    return res;
+  }
+
   public async findAll(): Promise<ZooAnimal[]> {
     return this.animalRepository
       .createQueryBuilder('animal')
