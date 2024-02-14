@@ -13,6 +13,7 @@ import { FeedHistoryService } from './feed-history.service';
 import { CreateFeedHistoryDto } from './dto/create-feed-history.dto';
 import { UpdateFeedHistoryDto } from './dto/update-feed-history.dto';
 import { FindFeedHistoryDto } from './dto/find-feed-history.dto';
+import { FilterFeedHistoryDto } from './dto/filter-feed-history.dto';
 
 @Controller('feed-history')
 export class FeedHistoryController {
@@ -22,8 +23,8 @@ export class FeedHistoryController {
     return this.feedHistoryService.create(createFeedHistoryDto);
   }
   @Get('/all')
-  findAll() {
-    return this.feedHistoryService.findAll();
+  findAll(@Body() filterFeedHistoryDto: FilterFeedHistoryDto) {
+    return this.feedHistoryService.findAll(filterFeedHistoryDto);
   }
   @Get('/one')
   findOne(@Body() findFeedHistoryDto: FindFeedHistoryDto) {

@@ -12,6 +12,7 @@ import { AnimalService } from '../animal/animal.service';
 import { KeeperService } from '../keeper/keeper.service';
 import { FoodService } from '../food/food.service';
 import { UpdateFeedHistoryDto } from './dto/update-feed-history.dto';
+import { FilterFeedHistoryDto } from './dto/filter-feed-history.dto';
 
 @Injectable()
 export class FeedHistoryService {
@@ -23,10 +24,25 @@ export class FeedHistoryService {
     private readonly foodService: FoodService,
   ) {}
 
-  public async findAll(): Promise<FeedHistory[]> {
-    return this.feedHistoryRepository.find({
-      relations: { animal: true, keeper: true, food: true },
-    });
+  public async findAll(
+    filterFeedHistoryDto: FilterFeedHistoryDto,
+  ): Promise<FeedHistory[]> {
+    const baseQuery = this.feedHistoryRepository
+      .createQueryBuilder('history')
+      .leftJoinAndSelect('history.animal', 'animal')
+      .leftJoinAndSelect('history.keeper', 'keeper')
+      .leftJoinAndSelect('history.food', 'food');
+    if (filterFeedHistoryDto.animalId) {
+      baseQuery.andWhere('history.animal.id = :animalId', {
+        animalId: filterFeedHistoryDto.animalId,
+      });
+    }
+    if (filterFeedHistoryDto.keeperId) {
+      baseQuery.andWhere('history.keeper.id = :keeperId', {
+        keeperId: filterFeedHistoryDto.keeperId,
+      });
+    }
+    return await baseQuery.getMany();
   }
 
   public async findOne({
