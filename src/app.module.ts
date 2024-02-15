@@ -27,8 +27,6 @@ import { FeedHistoryModule } from './feed-history/feed-history.module';
           database: configService.get<string>('DATABASE_NAME'),
           entities: [ZooKeeper, ZooAnimal, ZooShift],
           synchronize: false,
-          logger: 'advanced-console',
-          logging: true,
           autoLoadEntities: true,
           options: {
             encrypt: false,

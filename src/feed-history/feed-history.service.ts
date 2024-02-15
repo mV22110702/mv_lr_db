@@ -13,6 +13,7 @@ import { KeeperService } from '../keeper/keeper.service';
 import { FoodService } from '../food/food.service';
 import { UpdateFeedHistoryDto } from './dto/update-feed-history.dto';
 import { FilterFeedHistoryDto } from './dto/filter-feed-history.dto';
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 
 @Injectable()
 export class FeedHistoryService {
@@ -124,6 +125,8 @@ export class FeedHistoryService {
       keeperId,
       createdAt,
     });
+    console.log('===');
+    console.log(feedHistoryToUpdate);
     if (!feedHistoryToUpdate)
       throw new HttpException('Feed history not found', HttpStatus.BAD_REQUEST);
     const food = await this.foodService.findOne(feedHistoryDto.foodId);
@@ -135,7 +138,7 @@ export class FeedHistoryService {
         (feedHistoryToUpdate[k] = feedHistoryDto[k] || feedHistoryToUpdate[k]),
     );
     await this.feedHistoryRepository.save(feedHistoryToUpdate);
-    return this.findOne({ animalId, keeperId, createdAt });
+    return await this.findOne({ animalId, keeperId, createdAt });
   }
 
   public async remove({

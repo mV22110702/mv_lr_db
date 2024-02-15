@@ -13,7 +13,7 @@ export class CreateFeedHistoryDto {
 
   @IsDateString({}, { message: 'Creation date must be a valid date' })
   @IsNotEmpty({ message: 'Creation date is required' })
-  readonly createdAt: Date;
+  readonly createdAt: string;
 
   @IsNumber({}, { message: 'Food ID must be a number' })
   @Min(1, { message: 'Food ID must be greater than 0' })
