@@ -9,7 +9,7 @@ export class Food {
   @Column({ type: 'varchar', length: 200 })
   name: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'float' })
   amount: number;
 
   @Column({ name: 'restocked_at', type: 'datetime' })

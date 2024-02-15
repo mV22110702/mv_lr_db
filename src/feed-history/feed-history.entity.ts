@@ -42,6 +42,6 @@ export class FeedHistory {
   @PrimaryColumn({ type: 'datetime', name: 'created_at', insert: true })
   createdAt: Date;
 
-  @Column()
+  @Column({ type: 'float' })
   amount: number;
 }

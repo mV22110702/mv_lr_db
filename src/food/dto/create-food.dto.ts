@@ -16,7 +16,7 @@ export class CreateFoodDto {
   @IsDateString({}, { message: 'Restock date must be a valid date' })
   restockedAt: Date;
 
-  @IsDate({ message: 'Last used date must be a valid date' })
+  @IsDateString({},{ message: 'Last used date must be a valid date' })
   @IsOptional()
   usedAt: Date;
 }
