@@ -18,6 +18,8 @@ export class Food {
   @Column({ name: 'used_at', type: 'datetime', nullable: true })
   usedAt: Date;
 
-  @OneToMany((type) => FeedHistory, (history) => history.food)
+  @OneToMany((type) => FeedHistory, (history) => history.food, {
+    cascade: true,
+  })
   feedHistories: FeedHistory[];
 }

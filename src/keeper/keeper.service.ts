@@ -26,7 +26,7 @@ export class KeeperService {
 
     const request = new sql.Request();
     request.input('keeperId', sql.Int, id);
-    request.output('shiftCount', sql.Int, 0);
+    request.output('shiftsCount', sql.Int, 0);
     const res = await request.execute('countShiftsByKeeper');
     return res.output;
   }

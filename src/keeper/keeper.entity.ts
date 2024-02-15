@@ -11,9 +11,11 @@ export class ZooKeeper {
   @Column({ name: 'last_name', type: 'varchar', length: 200 })
   lastName: string;
 
-  @OneToMany((type) => ZooShift, (shift) => shift.keeper)
+  @OneToMany((type) => ZooShift, (shift) => shift.keeper, { cascade: true })
   shifts: ZooShift[];
 
-  @OneToMany((type) => FeedHistory, (history) => history.keeper)
+  @OneToMany((type) => FeedHistory, (history) => history.keeper, {
+    cascade: true,
+  })
   feedHistories: FeedHistory[];
 }

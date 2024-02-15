@@ -12,9 +12,11 @@ export class ZooAnimal {
   @Column({ type: 'varchar', length: 200 })
   name: string;
 
-  @OneToMany(() => ZooShift, (shift) => shift.animal)
+  @OneToMany(() => ZooShift, (shift) => shift.animal, { cascade: true })
   shifts: ZooShift[];
 
-  @OneToMany((type) => FeedHistory, (history) => history.animal)
+  @OneToMany((type) => FeedHistory, (history) => history.animal, {
+    cascade: true,
+  })
   feedHistories: FeedHistory[];
 }
