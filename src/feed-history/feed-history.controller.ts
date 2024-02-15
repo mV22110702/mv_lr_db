@@ -22,11 +22,11 @@ export class FeedHistoryController {
   create(@Body() createFeedHistoryDto: CreateFeedHistoryDto) {
     return this.feedHistoryService.create(createFeedHistoryDto);
   }
-  @Get('/all')
+  @Post('/all')
   findAll(@Body() filterFeedHistoryDto: FilterFeedHistoryDto) {
     return this.feedHistoryService.findAll(filterFeedHistoryDto);
   }
-  @Get('/one')
+  @Post('/one')
   findOne(@Body() findFeedHistoryDto: FindFeedHistoryDto) {
     return this.feedHistoryService.findOne(findFeedHistoryDto);
   }
